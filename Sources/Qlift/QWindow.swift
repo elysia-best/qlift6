@@ -104,6 +104,16 @@ open class QWindow: QObject {
         set { QWindow_setIcon(ptr, newValue.ptr) }
     }
 
+    public var vulkanInstance: QVulkanInstance? {
+        get {
+            guard let instancePtr = QWindow_vulkanInstance(ptr) else {
+                return nil
+            }
+            return QVulkanInstance(ptr: instancePtr)
+        }
+        set { QWindow_setVulkanInstance(ptr, newValue?.ptr) }
+    }
+
 
     // MARK: Functions
 

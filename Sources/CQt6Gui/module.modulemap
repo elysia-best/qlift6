@@ -1,0 +1,3 @@
+module CQt6Gui [system] {
+    export *
+}

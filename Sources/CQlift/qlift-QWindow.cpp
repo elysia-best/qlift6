@@ -138,6 +138,9 @@
 [[maybe_unused]] int QWindow_y(void *window) {
     return static_cast<QWindow *>(window)->y();
 }
+[[maybe_unused]] void *QWindow_vulkanInstance(void *window) {
+    return static_cast<QWindow *>(window)->vulkanInstance();
+}
 [[maybe_unused]] bool QWindow_close(void *window) {
     return static_cast<QWindow *>(window)->close();
 }
@@ -250,6 +253,9 @@
 }
 [[maybe_unused]] void QWindow_setMinimumWidth(void *window, int w) {
     static_cast<QWindow *>(window)->setMinimumWidth(w);
+}
+[[maybe_unused]] void QWindow_setVulkanInstance(void *window, void *instance) {
+    static_cast<QWindow *>(window)->setVulkanInstance(static_cast<QVulkanInstance *>(instance));
 }
 [[maybe_unused]] void QWindow_setTitle(void *window, const char *title) {
     static_cast<QWindow *>(window)->setTitle(title);
