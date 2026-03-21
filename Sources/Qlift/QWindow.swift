@@ -162,6 +162,10 @@ open class QWindow: QObject {
         QWindow_showNormal(ptr)
     }
 
+    public func requestUpdate() {
+        QWindow_requestUpdate(ptr)
+    }
+
     public func x() -> Int32 {
         QWindow_x(ptr)
     }
