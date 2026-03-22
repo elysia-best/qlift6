@@ -6,6 +6,10 @@
 #include <QtLogging>
 #endif
 
+#ifndef __cplusplus
+typedef void *QtMessageHandler;
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -27,13 +31,8 @@ LIBRARY_API CQString QtLogging_formatLogMessage(int type,
                                                 const char *function,
                                                 int line);
 
-#ifdef __cplusplus
 LIBRARY_API QtMessageHandler QtLogging_installMessageHandler(void *context,
                                                              QtLoggingMessageHandler handler);
-#else
-LIBRARY_API void *QtLogging_installMessageHandler(void *context,
-                                                  QtLoggingMessageHandler handler);
-#endif
 
 LIBRARY_API void QtLogging_debug(const char *message);
 LIBRARY_API void QtLogging_info(const char *message);

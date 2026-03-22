@@ -17,6 +17,7 @@ public struct QMessageLogContext {
 }
 
 public typealias QtMessageHandler = (QtMsgType, QMessageLogContext, String) -> ()
+public typealias QtNativeMessageHandler = UnsafeMutableRawPointer?
 
 private final class QtLoggingMessageHandlerBox {
     let handler: QtMessageHandler
@@ -74,11 +75,11 @@ public enum QtLogging {
         return String(utf16CodeUnits: text.utf16, count: Int(text.size))
     }
 
-    public static func installMessageHandler(_ handler: QtMessageHandler?) {
+    @discardableResult
+    public static func installMessageHandler(_ handler: QtMessageHandler?) -> QtNativeMessageHandler {
         guard let handler else {
             qtLoggingMessageHandlerBox = nil
-            QtLogging_installMessageHandler(nil, nil)
-            return
+            return QtLogging_installMessageHandler(nil, nil)
         }
 
         let box = QtLoggingMessageHandlerBox(handler: handler)
