@@ -11,6 +11,7 @@ extern "C" {
 #pragma clang assume_nonnull begin
 
 LIBRARY_API void *QWidget_new(void * _Nullable parent, int flags);
+LIBRARY_API void *QWidget_createWindowContainer(void *window, void * _Nullable parent, int flags);
 LIBRARY_API bool QWidget_close(void *widget);
 LIBRARY_API void QWidget_show(void *widget);
 LIBRARY_API void QWidget_addAction(void *widget, void *action);

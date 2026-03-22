@@ -1,5 +1,6 @@
 #include <QWidget>
 #include <QIcon>
+#include <QWindow>
 #include <wobjectimpl.h>
 #include "qlift-QWidget.h"
 
@@ -7,6 +8,15 @@
     return static_cast<void *>(
         new QliftWidget{static_cast<QWidget *>(parent),
                         static_cast<QFlags<Qt::WindowType>>(flags)});
+}
+
+[[maybe_unused]] void *QWidget_createWindowContainer(void *window,
+                                                     void *parent,
+                                                     int flags) {
+    return static_cast<void *>(QWidget::createWindowContainer(
+        static_cast<QWindow *>(window),
+        static_cast<QWidget *>(parent),
+        static_cast<QFlags<Qt::WindowType>>(flags)));
 }
 
 [[maybe_unused]] bool QWidget_close(void *widget) {

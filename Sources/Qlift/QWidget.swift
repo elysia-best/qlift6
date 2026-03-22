@@ -2,6 +2,18 @@ import CQlift
 
 open class QWidget: QObject {
 
+    public static func createWindowContainer(window: QWindow,
+                                             parent: QWidget? = nil,
+                                             flags: Qt.WindowFlags = .Widget) -> QWidget {
+        let containerPtr = QWidget_createWindowContainer(window.ptr,
+                                                         parent?.ptr,
+                                                         flags.rawValue)
+        if let container = QObject.swiftObject(from: containerPtr, ofType: QWidget.self) {
+            return container
+        }
+        return QWidget(ptr: containerPtr)
+    }
+
     // MARK: Init/deinit
 
     public init(parent: QWidget? = nil, flags: Qt.WindowFlags = .Widget) {
