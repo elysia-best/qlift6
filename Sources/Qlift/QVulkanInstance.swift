@@ -1,9 +1,20 @@
 import CQlift
+import Vulkan
 #if os(Linux)
 import Glibc
 #else
 import Darwin
 #endif
+
+@inline(__always)
+private func qliftVkHandle<T>(_ raw: UInt64, as: T.Type = T.self) -> T {
+    unsafeBitCast(raw, to: T.self)
+}
+
+@inline(__always)
+private func qliftRawVkHandle<T>(_ vkHandle: T) -> UInt64 {
+    unsafeBitCast(vkHandle, to: UInt64.self)
+}
 
 public struct QVulkanExtensionInfo {
     public let name: String
@@ -93,15 +104,15 @@ public class QVulkanInstance {
         return QVulkanFunctions(ptr: p)
     }
 
-    public func deviceFunctions(device: UInt64) -> QVulkanDeviceFunctions? {
-        guard let p = QliftQVulkanInstance_deviceFunctions(ptr, device) else {
+    public func deviceFunctions(device: VkDevice) -> QVulkanDeviceFunctions? {
+        guard let p = QliftQVulkanInstance_deviceFunctions(ptr, qliftRawVkHandle(device)) else {
             return nil
         }
         return QVulkanDeviceFunctions(ptr: p)
     }
 
-    public var vkInstanceHandle: UInt64 {
-        QVulkanInstance_vkInstance(ptr)
+    public var vkInstance: VkInstance {
+        qliftVkHandle(QVulkanInstance_vkInstance(ptr))
     }
 
     public func getInstanceProcAddr(_ name: String) -> UInt64 {
@@ -188,8 +199,8 @@ public class QVulkanInstance {
         QVulkanInstance_setApiVersion(ptr, major, minor, micro)
     }
 
-    public func setVkInstance(handle: UInt64) {
-        QVulkanInstance_setVkInstance(ptr, handle)
+    public func setVkInstance(_ existingVkInstance: VkInstance) {
+        QVulkanInstance_setVkInstance(ptr, qliftRawVkHandle(existingVkInstance))
     }
 
     public func setExtensions(_ extensions: [String]) {
@@ -216,8 +227,8 @@ public class QVulkanInstance {
         }
     }
 
-    public func resetDeviceFunctions(device: UInt64) {
-        QVulkanInstance_resetDeviceFunctions(ptr, device)
+    public func resetDeviceFunctions(device: VkDevice) {
+        QVulkanInstance_resetDeviceFunctions(ptr, qliftRawVkHandle(device))
     }
 
     public func presentAboutToBeQueued(window: QWindow) {
@@ -228,14 +239,17 @@ public class QVulkanInstance {
         QVulkanInstance_presentQueued(ptr, window.ptr)
     }
 
-    public func supportsPresent(physicalDevice: UInt64,
+    public func supportsPresent(physicalDevice: VkPhysicalDevice,
                                 queueFamilyIndex: UInt32,
                                 window: QWindow) -> Bool {
-        QVulkanInstance_supportsPresent(ptr, physicalDevice, queueFamilyIndex, window.ptr)
+        QVulkanInstance_supportsPresent(ptr,
+                                        qliftRawVkHandle(physicalDevice),
+                                        queueFamilyIndex,
+                                        window.ptr)
     }
 
-    public static func surfaceForWindow(_ window: QWindow) -> UInt64 {
-        QVulkanInstance_surfaceForWindow(window.ptr)
+    public static func surfaceForWindow(_ window: QWindow) -> VkSurfaceKHR {
+        qliftVkHandle(QVulkanInstance_surfaceForWindow(window.ptr))
     }
 
     @discardableResult
