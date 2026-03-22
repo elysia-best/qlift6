@@ -16,6 +16,22 @@ open class QMessageBox: QDialog {
         set { QMessageBox_setText(self.ptr, newValue) }
     }
 
+    public var informativeText: String {
+        get {
+            let s = QMessageBox_informativeText(ptr)
+            return String(utf16CodeUnits: s.utf16, count: Int(s.size))
+        }
+        set { QMessageBox_setInformativeText(self.ptr, newValue) }
+    }
+
+    public var detailedText: String {
+        get {
+            let s = QMessageBox_detailedText(ptr)
+            return String(utf16CodeUnits: s.utf16, count: Int(s.size))
+        }
+        set { QMessageBox_setDetailedText(self.ptr, newValue) }
+    }
+
     public override var windowTitle: String {
         get {
             let s = QMessageBox_windowTitle(ptr)
@@ -48,6 +64,62 @@ open class QMessageBox: QDialog {
     open func exec() -> QMessageBox.StandardButton {
         return QMessageBox.StandardButton(rawValue: QMessageBox_exec(self.ptr))
     }
+
+    public static func about(parent: QWidget? = nil, title: String, text: String) {
+        QMessageBox_about(parent?.ptr, title, text)
+    }
+
+    public static func aboutQt(parent: QWidget? = nil, title: String = "") {
+        QMessageBox_aboutQt(parent?.ptr, title)
+    }
+
+    public static func critical(parent: QWidget? = nil,
+                                title: String,
+                                text: String,
+                                buttons: QMessageBox.StandardButton = .Ok,
+                                defaultButton: QMessageBox.StandardButton = .NoButton) -> QMessageBox.StandardButton {
+        QMessageBox.StandardButton(rawValue: QMessageBox_critical(parent?.ptr,
+                                                                  title,
+                                                                  text,
+                                                                  buttons.rawValue,
+                                                                  defaultButton.rawValue))
+    }
+
+    public static func information(parent: QWidget? = nil,
+                                   title: String,
+                                   text: String,
+                                   buttons: QMessageBox.StandardButton = .Ok,
+                                   defaultButton: QMessageBox.StandardButton = .NoButton) -> QMessageBox.StandardButton {
+        QMessageBox.StandardButton(rawValue: QMessageBox_information(parent?.ptr,
+                                                                     title,
+                                                                     text,
+                                                                     buttons.rawValue,
+                                                                     defaultButton.rawValue))
+    }
+
+    public static func question(parent: QWidget? = nil,
+                                title: String,
+                                text: String,
+                                buttons: QMessageBox.StandardButton = [.Yes, .No],
+                                defaultButton: QMessageBox.StandardButton = .NoButton) -> QMessageBox.StandardButton {
+        QMessageBox.StandardButton(rawValue: QMessageBox_question(parent?.ptr,
+                                                                  title,
+                                                                  text,
+                                                                  buttons.rawValue,
+                                                                  defaultButton.rawValue))
+    }
+
+    public static func warning(parent: QWidget? = nil,
+                               title: String,
+                               text: String,
+                               buttons: QMessageBox.StandardButton = .Ok,
+                               defaultButton: QMessageBox.StandardButton = .NoButton) -> QMessageBox.StandardButton {
+        QMessageBox.StandardButton(rawValue: QMessageBox_warning(parent?.ptr,
+                                                                 title,
+                                                                 text,
+                                                                 buttons.rawValue,
+                                                                 defaultButton.rawValue))
+    }
 }
 
 extension QMessageBox {
@@ -73,8 +145,23 @@ extension QMessageBox {
         }
 
         public static let NoButton: StandardButton = []
+        public static let Ok = StandardButton(rawValue: 0x00000400)
+        public static let Open = StandardButton(rawValue: 0x00002000)
+        public static let Save = StandardButton(rawValue: 0x00000800)
+        public static let Cancel = StandardButton(rawValue: 0x00400000)
+        public static let Close = StandardButton(rawValue: 0x00200000)
+        public static let Discard = StandardButton(rawValue: 0x00800000)
+        public static let Apply = StandardButton(rawValue: 0x02000000)
+        public static let Reset = StandardButton(rawValue: 0x04000000)
+        public static let RestoreDefaults = StandardButton(rawValue: 0x08000000)
+        public static let Help = StandardButton(rawValue: 0x01000000)
+        public static let SaveAll = StandardButton(rawValue: 0x00001000)
         public static let Yes = StandardButton(rawValue: 16384)
+        public static let YesToAll = StandardButton(rawValue: 0x00008000)
         public static let No = StandardButton(rawValue: 65536)
-        // Incomplete
+        public static let NoToAll = StandardButton(rawValue: 0x00020000)
+        public static let Abort = StandardButton(rawValue: 0x00040000)
+        public static let Retry = StandardButton(rawValue: 0x00080000)
+        public static let Ignore = StandardButton(rawValue: 0x00100000)
     }
 }
