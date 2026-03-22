@@ -19,6 +19,10 @@ static CQString toCQString(const QString &text) {
     return CQString { text.utf16(), text.size() };
 }
 
+static const VkPhysicalDeviceProperties *activePhysicalDeviceProperties(void *window) {
+    return static_cast<QVulkanWindow *>(window)->physicalDeviceProperties();
+}
+
 template <typename T>
 unsigned long long vkHandleToULL(T handle) {
     if constexpr (std::is_pointer_v<T>) {
@@ -122,6 +126,67 @@ private:
         return 0;
     }
     return list[index].driverVersion;
+}
+
+[[maybe_unused]] bool QVulkanWindow_hasPhysicalDeviceProperties(void *window) {
+    return activePhysicalDeviceProperties(window) != nullptr;
+}
+
+[[maybe_unused]] bool QVulkanWindow_physicalDeviceProperties(void *window, void *outProperties) {
+    const auto *props = activePhysicalDeviceProperties(window);
+    if (props == nullptr || outProperties == nullptr) {
+        return false;
+    }
+    *static_cast<VkPhysicalDeviceProperties *>(outProperties) = *props;
+    return true;
+}
+
+[[maybe_unused]] CQString QVulkanWindow_physicalDevicePropertiesName(void *window) {
+    const auto *props = activePhysicalDeviceProperties(window);
+    if (props == nullptr) {
+        return CQString { nullptr, 0 };
+    }
+    return toCQString(QString::fromUtf8(props->deviceName));
+}
+
+[[maybe_unused]] unsigned int QVulkanWindow_physicalDevicePropertiesVendorID(void *window) {
+    const auto *props = activePhysicalDeviceProperties(window);
+    if (props == nullptr) {
+        return 0;
+    }
+    return props->vendorID;
+}
+
+[[maybe_unused]] unsigned int QVulkanWindow_physicalDevicePropertiesDeviceID(void *window) {
+    const auto *props = activePhysicalDeviceProperties(window);
+    if (props == nullptr) {
+        return 0;
+    }
+    return props->deviceID;
+}
+
+[[maybe_unused]] unsigned int QVulkanWindow_physicalDevicePropertiesDeviceType(void *window) {
+    const auto *props = activePhysicalDeviceProperties(window);
+    if (props == nullptr) {
+        return 0;
+    }
+    return props->deviceType;
+}
+
+[[maybe_unused]] unsigned int QVulkanWindow_physicalDevicePropertiesApiVersion(void *window) {
+    const auto *props = activePhysicalDeviceProperties(window);
+    if (props == nullptr) {
+        return 0;
+    }
+    return props->apiVersion;
+}
+
+[[maybe_unused]] unsigned int QVulkanWindow_physicalDevicePropertiesDriverVersion(void *window) {
+    const auto *props = activePhysicalDeviceProperties(window);
+    if (props == nullptr) {
+        return 0;
+    }
+    return props->driverVersion;
 }
 
 [[maybe_unused]] int QVulkanWindow_supportedDeviceExtensionsSize(void *window) {

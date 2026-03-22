@@ -18,6 +18,14 @@ LIBRARY_API unsigned int QVulkanWindow_availablePhysicalDeviceDeviceIDAt(void *w
 LIBRARY_API unsigned int QVulkanWindow_availablePhysicalDeviceDeviceTypeAt(void *window, int index);
 LIBRARY_API unsigned int QVulkanWindow_availablePhysicalDeviceApiVersionAt(void *window, int index);
 LIBRARY_API unsigned int QVulkanWindow_availablePhysicalDeviceDriverVersionAt(void *window, int index);
+LIBRARY_API bool QVulkanWindow_hasPhysicalDeviceProperties(void *window);
+LIBRARY_API bool QVulkanWindow_physicalDeviceProperties(void *window, void *outProperties);
+LIBRARY_API CQString QVulkanWindow_physicalDevicePropertiesName(void *window);
+LIBRARY_API unsigned int QVulkanWindow_physicalDevicePropertiesVendorID(void *window);
+LIBRARY_API unsigned int QVulkanWindow_physicalDevicePropertiesDeviceID(void *window);
+LIBRARY_API unsigned int QVulkanWindow_physicalDevicePropertiesDeviceType(void *window);
+LIBRARY_API unsigned int QVulkanWindow_physicalDevicePropertiesApiVersion(void *window);
+LIBRARY_API unsigned int QVulkanWindow_physicalDevicePropertiesDriverVersion(void *window);
 LIBRARY_API int QVulkanWindow_supportedDeviceExtensionsSize(void *window);
 LIBRARY_API CQString QVulkanWindow_supportedDeviceExtensionNameAt(void *window, int index);
 LIBRARY_API unsigned int QVulkanWindow_supportedDeviceExtensionVersionAt(void *window, int index);

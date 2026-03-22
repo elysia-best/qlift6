@@ -245,6 +245,14 @@ open class QVulkanWindow: QWindow {
         }
     }
 
+    public var physicalDeviceProperties: VkPhysicalDeviceProperties? {
+        var properties = VkPhysicalDeviceProperties()
+        let ok = withUnsafeMutablePointer(to: &properties) { propsPtr in
+            QVulkanWindow_physicalDeviceProperties(ptr, UnsafeMutableRawPointer(propsPtr))
+        }
+        return ok ? properties : nil
+    }
+
     public func msaaColorImageHandle(at index: Int32) -> UInt64 {
         QVulkanWindow_msaaColorImage(ptr, index)
     }
