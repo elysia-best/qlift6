@@ -89,6 +89,19 @@ public enum QtLogging {
         return QtLogging_installMessageHandler(rawContext, qtLoggingMessageHandlerThunk)
     }
 
+    public static func callNativeMessageHandler(_ handler: QtNativeMessageHandler,
+                                                type: QtMsgType,
+                                                context: QMessageLogContext,
+                                                message: String) {
+        QtLogging_callMessageHandler(handler,
+                                     type.rawValue,
+                                     message,
+                                     context.category,
+                                     context.file,
+                                     context.function,
+                                     context.line)
+    }
+
     public static func debug(_ message: String) {
         QtLogging_debug(message)
     }

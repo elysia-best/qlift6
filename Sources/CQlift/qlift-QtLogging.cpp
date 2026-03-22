@@ -60,6 +60,27 @@ void qliftQtMessageHandler(QtMsgType type,
     return qInstallMessageHandler(qliftQtMessageHandler);
 }
 
+[[maybe_unused]] void QtLogging_callMessageHandler(QtMessageHandler handler,
+                                                   int type,
+                                                   const char *message,
+                                                   const char *category,
+                                                   const char *file,
+                                                   const char *function,
+                                                   int line) {
+    if (handler == nullptr) {
+        return;
+    }
+
+    const QMessageLogContext context{file,
+                                     line,
+                                     function,
+                                     category != nullptr ? category : "default"};
+
+    handler(static_cast<QtMsgType>(type),
+            context,
+            QString::fromUtf8(message != nullptr ? message : ""));
+}
+
 [[maybe_unused]] void QtLogging_debug(const char *message) {
     qDebug().noquote() << QString::fromUtf8(message != nullptr ? message : "");
 }
