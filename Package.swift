@@ -7,9 +7,12 @@ let package = Package(
     products: [
         .library(name: "Qlift", targets: ["Qlift"]),
     ],
+    dependencies: [
+        .package(url: "https://github.com/ctreffs/SwiftVulkan.git", .upToNextMajor(from: "0.2.1")),
+    ],
     targets: [
         .target(name: "Qlift",
-                dependencies: ["CQlift"]),
+                dependencies: ["CQlift", .product(name: "Vulkan", package: "SwiftVulkan")]),
         .target(name: "CQlift",
                 dependencies: ["CQt6Widgets", "CQt6Quick", "CQt6Gui"],
                 cxxSettings: [.headerSearchPath("private")]),
