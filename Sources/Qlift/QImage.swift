@@ -122,8 +122,8 @@ open class QImage {
         }
     }
 
-    public func save(fileName: String, format: String? = nil, quality: Int32 = -1) -> Bool {
-        QImage_save(ptr, fileName, format, quality)
+    public func save(fileName: String, format: String? = nil, quality: Int = -1) -> Bool {
+        QImage_save(ptr, fileName, format, Int32(quality))
     }
 
     public func rgbSwapped() -> QImage {
