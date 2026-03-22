@@ -85,7 +85,7 @@ public enum QtLogging {
         qtLoggingMessageHandlerBox = box
         let rawContext = Unmanaged.passUnretained(box).toOpaque()
 
-        QtLogging_installMessageHandler(rawContext, qtLoggingMessageHandlerThunk)
+        return QtLogging_installMessageHandler(rawContext, qtLoggingMessageHandlerThunk)
     }
 
     public static func debug(_ message: String) {
