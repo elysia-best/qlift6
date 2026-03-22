@@ -16,10 +16,12 @@ public struct QMessageLogContext {
     public let line: Int32
 }
 
-private final class QtLoggingMessageHandlerBox {
-    let handler: (QtMsgType, QMessageLogContext, String) -> Void
+public typealias QtMessageHandler = (QtMsgType, QMessageLogContext, String) -> ()
 
-    init(handler: @escaping (QtMsgType, QMessageLogContext, String) -> Void) {
+private final class QtLoggingMessageHandlerBox {
+    let handler: QtMessageHandler
+
+    init(handler: @escaping QtMessageHandler) {
         self.handler = handler
     }
 }
@@ -72,7 +74,7 @@ public enum QtLogging {
         return String(utf16CodeUnits: text.utf16, count: Int(text.size))
     }
 
-    public static func installMessageHandler(_ handler: ((QtMsgType, QMessageLogContext, String) -> Void)?) {
+    public static func installMessageHandler(_ handler: QtMessageHandler?) {
         guard let handler else {
             qtLoggingMessageHandlerBox = nil
             QtLogging_installMessageHandler(nil, nil)

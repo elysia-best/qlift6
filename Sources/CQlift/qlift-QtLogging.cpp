@@ -48,17 +48,16 @@ void qliftQtMessageHandler(QtMsgType type,
     return CQString{formattedMessage.utf16(), formattedMessage.size()};
 }
 
-[[maybe_unused]] void QtLogging_installMessageHandler(void *context,
-                                                      QtLoggingMessageHandler handler) {
+[[maybe_unused]] QtMessageHandler QtLogging_installMessageHandler(void *context,
+                                                                  QtLoggingMessageHandler handler) {
     g_messageHandlerContext = context;
     g_messageHandler = handler;
 
     if (handler == nullptr) {
-        qInstallMessageHandler(nullptr);
-        return;
+        return qInstallMessageHandler(nullptr);
     }
 
-    qInstallMessageHandler(qliftQtMessageHandler);
+    return qInstallMessageHandler(qliftQtMessageHandler);
 }
 
 [[maybe_unused]] void QtLogging_debug(const char *message) {
